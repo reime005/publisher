@@ -1,0 +1,29 @@
+name: Deploy And Publish
+
+on: [push]
+
+jobs:
+  some-job:
+    runs-on: ubuntu-18.04
+
+    steps:
+    - name: Checkout project
+      uses: actions/checkout@v1
+
+    - name: Specify node version
+      uses: actions/setup-node@v1
+      with:
+        node-version: '10.x'
+
+    - name: Build
+      run: |
+        yarn install --frozen-lockfile
+        yarn build
+
+    - name: Build and Deploy
+      uses: JamesIves/github-pages-deploy-action@releases/v3
+      with:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        BRANCH: master # The branch the action should deploy to.
+        TARGET_FOLDER: deployed # The branch the action should deploy to.
+        FOLDER: build # The folder the action should deploy.
